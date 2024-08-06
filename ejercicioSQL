@@ -17,23 +17,23 @@ Finding which student and professor have the most courses in common
 
 CREATE TABLE Students (
     student_id INT PRIMARY KEY,
-    first_name VARCHAR(50),
-    last_name VARCHAR(50)
+    first_name VARCHAR(20),
+    last_name VARCHAR(40)
 );
 
 
 CREATE TABLE Courses (
     course_id INT PRIMARY KEY,
-    course_name VARCHAR(100),
+    course_name VARCHAR(50),
     credits INT
 );
 
 
 CREATE TABLE Professors (
     professor_id INT PRIMARY KEY,
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-    department VARCHAR(50)
+    first_name VARCHAR(20),
+    last_name VARCHAR(40),
+    department VARCHAR(30)
 );
 
 
@@ -85,14 +85,16 @@ INSERT INTO Grades (grade_id, student_id, course_id, professor_id, grade) VALUES
 
 SELECT p.professor_id, p.first_name, p.last_name, AVG(g.grade) AS average_grade
 FROM Professors p
-JOIN Grades g ON p.professor_id = g.professor_id
+JOIN Grades g 
+ON p.professor_id = g.professor_id
 GROUP BY p.professor_id, p.first_name, p.last_name;
 
 -- MEJORES CALIFICACION DE CADA ESTUDIANTE
 
 SELECT s.student_id, s.first_name, s.last_name, MAX(g.grade) AS top_grade
 FROM Students s
-JOIN Grades g ON s.student_id = g.student_id
+JOIN Grades g 
+ON s.student_id = g.student_id
 GROUP BY s.student_id, s.first_name, s.last_name;
 
 
@@ -100,8 +102,10 @@ GROUP BY s.student_id, s.first_name, s.last_name;
 
 SELECT s.student_id, s.first_name, s.last_name, c.course_name
 FROM Students s
-JOIN Grades g ON s.student_id = g.student_id
-JOIN Courses c ON g.course_id = c.course_id
+JOIN Grades g 
+ON s.student_id = g.student_id
+JOIN Courses c 
+ON g.course_id = c.course_id
 ORDER BY s.student_id, c.course_name;
 
 
@@ -109,7 +113,8 @@ ORDER BY s.student_id, c.course_name;
 
 SELECT c.course_id, c.course_name, AVG(g.grade) AS average_grade
 FROM Courses c
-JOIN Grades g ON c.course_id = g.course_id
+JOIN Grades g 
+ON c.course_id = g.course_id
 GROUP BY c.course_id, c.course_name
 ORDER BY average_grade ASC;
 
@@ -117,8 +122,10 @@ ORDER BY average_grade ASC;
 
 SELECT s.student_id, s.first_name, s.last_name, p.professor_id, p.first_name, p.last_name, COUNT(g.course_id) AS common_courses
 FROM Students s
-JOIN Grades g ON s.student_id = g.student_id
-JOIN Professors p ON g.professor_id = p.professor_id
+JOIN Grades g 
+ON s.student_id = g.student_id
+JOIN Professors p 
+ON g.professor_id = p.professor_id
 GROUP BY s.student_id, s.first_name, s.last_name, p.professor_id, p.first_name, p.last_name
 ORDER BY common_courses DESC
 LIMIT 1;
